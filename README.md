@@ -7,7 +7,60 @@ There is a precompiled binary version of this program here:
 https://www.savvycan.com/ESP32RET_Updater.zip
 
 
-#### Requirements:
+#### PlatformIO: ESP32-S3 DevKit N16R8 with SN65HVD230
+
+The `stable-s3-devkitc-1-n16r8` environment targets a generic ESP32-S3 DevKit with
+16 MB flash and 8 MB octal PSRAM. It uses the ESP32-S3's built-in TWAI controller
+and one CAN bus. The transceiver is connected to GPIO 4 (CAN RX) and GPIO 5
+(CAN TX).
+
+Wire the SN65HVD230 module as follows:
+
+| SN65HVD230 | ESP32-S3 DevKit / CAN bus |
+| --- | --- |
+| VCC | 3V3 |
+| GND | GND |
+| RXD | GPIO 4 |
+| TXD | GPIO 5 |
+| RS | GND (normal/high-speed mode) |
+| CANH, CANL | CAN bus CAN_H, CAN_L |
+
+Use a 3.3 V-compatible SN65HVD230 module. Do not connect CANH/CANL directly to
+the ESP32. Terminate the bus at its two physical ends (typically 120 ohms at
+each end; about 60 ohms measured between CANH and CANL with the bus powered
+off).
+
+To build and upload from Windows 11:
+
+1. Install Visual Studio Code and the PlatformIO IDE extension.
+2. Open this project folder in VS Code and wait for PlatformIO to install the
+   ESP32 platform and libraries.
+3. Select the `stable-s3-devkitc-1-n16r8` environment in PlatformIO and run
+   **Build**. The firmware is written to
+   `.pio/build/stable-s3-devkitc-1-n16r8/firmware.bin`.
+4. Connect the DevKit by USB and run **Upload** in PlatformIO. If the board is
+   not detected, hold **BOOT**, press and release **RESET**, then release
+   **BOOT** and retry. PlatformIO uploads the bootloader, partition table, and
+   firmware at the required addresses.
+
+The same actions are available from the PlatformIO terminal:
+
+```text
+pio run -e stable-s3-devkitc-1-n16r8
+pio run -e stable-s3-devkitc-1-n16r8 -t upload
+```
+
+By default, the device creates a Wi-Fi access point named `ESP32RETSSID` with
+password `aBigSecret`. Connect the PC to it, then in SavvyCAN add a GVRET
+network/TCP connection to `192.168.4.1`, port `23`. Configure the CAN bitrate
+in SavvyCAN to match the bus (the firmware default is 500 kbit/s).
+
+The existing S3 partition table is retained for compatibility; it allocates
+the first 8 MB of flash, while the firmware image is built for the 16 MB chip.
+If the board has saved settings from another ESP32RET board profile, set
+`SYSTYPE=4` in the serial console and restart it.
+
+#### Requirements (legacy Arduino IDE build):
 
 You will need the following to be able to compile the run this project:
 

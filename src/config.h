@@ -36,6 +36,14 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <esp32_mcp2517fd.h>
 #include <Preferences.h>
 
+#ifndef ESP32RET_CAN_RX_PIN
+#define ESP32RET_CAN_RX_PIN 4
+#endif
+
+#ifndef ESP32RET_CAN_TX_PIN
+#define ESP32RET_CAN_TX_PIN 5
+#endif
+
 //size to use for buffering writes to USB. On the ESP32 we're actually talking TTL serial to a TTL<->USB chip
 #define SER_BUFF_SIZE       1024
 
@@ -108,7 +116,7 @@ struct EEPROMSettings {
     boolean useBinarySerialComm; //use a binary protocol on the serial link or human readable format?
 
     uint8_t logLevel; //Level of logging to output on serial line
-    uint8_t systemType; //0 = A0RET, 1 = EVTV ESP32 Board, 2 = Macchine 5-CAN board
+    uint8_t systemType; //0 = A0RET, 1 = EVTV ESP32, 2 = Macchina 5-CAN, 3 = EVTV ESP32-S3, 4 = generic ESP32-S3
     
     boolean enableBT; //are we enabling bluetooth too?
     char btName[32];

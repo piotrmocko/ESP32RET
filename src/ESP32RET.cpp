@@ -98,6 +98,9 @@ void loadSettings()
 #ifdef CONFIG_IDF_TARGET_ESP32S3
     defaultVal = 3;
 #endif
+#ifdef ESP32RET_GENERIC_S3
+    defaultVal = 4;
+#endif
     settings.systemType = nvPrefs.getUChar("systype", defaultVal);
 
     if (settings.systemType == 0)
@@ -232,6 +235,32 @@ void loadSettings()
         SysSettings.lawicellExtendedMode = false;
         SysSettings.lawicelTimestamping = false;
         SysSettings.numBuses = 2;
+        SysSettings.isWifiActive = false;
+        SysSettings.isWifiConnected = false;
+        strcpy(deviceName, EVTV_NAME);
+        strcpy(otaHost, "media3.evtv.me");
+        strcpy(otaFilename, "/esp32s3ret.bin");
+    }
+
+    if (settings.systemType == 4)
+    {
+        Logger::console("Running on generic ESP32-S3 DevKit");
+        canBuses[0] = &CAN0;
+        CAN0.setCANPins(static_cast<gpio_num_t>(ESP32RET_CAN_RX_PIN),
+                        static_cast<gpio_num_t>(ESP32RET_CAN_TX_PIN));
+        SysSettings.LED_CANTX = 255;
+        SysSettings.LED_CANRX = 255;
+        SysSettings.LED_LOGGING = 255;
+        SysSettings.LED_CONNECTION_STATUS = 255;
+        SysSettings.fancyLED = false;
+        SysSettings.logToggle = false;
+        SysSettings.txToggle = true;
+        SysSettings.rxToggle = true;
+        SysSettings.lawicelAutoPoll = false;
+        SysSettings.lawicelMode = false;
+        SysSettings.lawicellExtendedMode = false;
+        SysSettings.lawicelTimestamping = false;
+        SysSettings.numBuses = 1;
         SysSettings.isWifiActive = false;
         SysSettings.isWifiConnected = false;
         strcpy(deviceName, EVTV_NAME);
