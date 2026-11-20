@@ -60,6 +60,20 @@ the first 8 MB of flash, while the firmware image is built for the 16 MB chip.
 If the board has saved settings from another ESP32RET board profile, set
 `SYSTYPE=4` in the serial console and restart it.
 
+#### Automated GitHub releases
+
+The [release workflow](./.github/workflows/release-firmware.yml) runs when a
+version tag is pushed.
+
+It builds the `stable-s3-devkitc-1-n16r8` environment and publishes a release
+named for the ESP32-S3 DevKit N16R8 and SN65HVD230. The release includes the
+firmware as `ESP32RET-ESP32-S3-DevKit-N16R8-SN65HVD230.bin`.
+
+```text
+git tag v1.0.0
+git push origin v1.0.0
+```
+
 #### Requirements (legacy Arduino IDE build):
 
 You will need the following to be able to compile the run this project:

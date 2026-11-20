@@ -1,0 +1,42 @@
+name: Build and release ESP32-S3 N16R8 firmware
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PlatformIO
+        run: python -m pip install platformio
+
+      - name: Build firmware
+        run: pio run -e stable-s3-devkitc-1-n16r8
+
+      - name: Prepare release asset
+        run: |
+          mkdir -p release
+          cp .pio/build/stable-s3-devkitc-1-n16r8/firmware.bin \
+            release/ESP32RET-ESP32-S3-DevKit-N16R8-SN65HVD230.bin
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            release/ESP32RET-ESP32-S3-DevKit-N16R8-SN65HVD230.bin \
+            --title "ESP32RET ${GITHUB_REF_NAME} - ESP32-S3 DevKit N16R8 + SN65HVD230" \
+            --notes "Firmware for ESP32-S3 DevKit N16R8 (16 MB flash, 8 MB PSRAM) with SN65HVD230. CAN RX: GPIO4; CAN TX: GPIO5. For SavvyCAN, connect to the ESP32RETSSID Wi-Fi access point and use GVRET TCP at 192.168.4.1:23. Default CAN bitrate: 500 kbit/s."
