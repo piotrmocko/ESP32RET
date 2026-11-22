@@ -207,6 +207,27 @@ The canbus is supposed to be terminated on both ends of the bus. This should not
 
 10. After the upload completes, press the **RST** button on the board.
 
+## Connecting with SavvyCAN
+
+1. Open **SavvyCAN** (tested with `V208`) and navigate to **Connection** -> **Open Connection Window** (or click **Add New Device Connection** inside **Connection Settings**).
+2. In the **New Connection** dialog, configure the following options:
+   - **Connection Type:** `Serial Connection (GVRET)`
+   - **Serial Port:** Select your ESP32's COM port (e.g., `COM8`)
+3. Click **Create New Connection**. Your device should appear in the **Connected Devices** list:
+
+   | # | Type | Subtype | Port | Buses | Status |
+   | :- | :--- | :------ | :--- | :---- | :----- |
+   | 1 | GVRET | gvret | COM8 | 1 | Connected |
+
+4. Select the connected device and configure **Bus Details** (Bus `0`):
+   - **Speed:** `125000` *(adjust to match your target CAN bus baud rate, e.g., `125000`, `250000`, `500000`)*
+   - **Listen Only:** Checked *(recommended when passively sniffing traffic to avoid sending ACKs or error frames)*
+   - **Enable Bus:** Checked
+5. Click **Save Bus Settings** to start capturing CAN frames.
+
+
+![SavvyCAN Connection](SavvyCAN%20Connection.png)
+
 ## License:
 
 This software is MIT licensed:
