@@ -25,10 +25,11 @@ Wire the SN65HVD230 module as follows:
 | RS | GND (normal/high-speed mode) |
 | CANH, CANL | CAN bus CAN_H, CAN_L |
 
-Use a 3.3 V-compatible SN65HVD230 module. Do not connect CANH/CANL directly to
-the ESP32. Terminate the bus at its two physical ends (typically 120 ohms at
-each end; about 60 ohms measured between CANH and CANL with the bus powered
-off).
+> [!WARNING]
+> **Important Hardware & Wiring Note:**
+> Use a 3.3 V-compatible SN65HVD230 module. Do not connect CANH/CANL directly to the ESP32.
+>
+> When connecting to a vehicle (e.g., Mazda), note that the car's CAN bus already has its own built-in termination resistors. The 120 Ω SMD resistor (labeled **`121`** on the SN65HVD230 module) across the CAN_H and CAN_L lines **must be desoldered/removed**; otherwise, the extra bus load will disrupt CAN communication and trigger errors on the instrument cluster.
 
 To build and upload from Windows 11:
 
